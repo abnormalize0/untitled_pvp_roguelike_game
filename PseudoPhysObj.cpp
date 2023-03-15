@@ -7,6 +7,8 @@
 #define ON_GROUND 0
 #define IN_AIR 1
 
+PseudoPhysObj::PseudoPhysObj() { }
+
 PseudoPhysObj::PseudoPhysObj(float init_x, float init_y, float init_size_x, float init_size_y) {
     x = init_x;
     y = init_y;
