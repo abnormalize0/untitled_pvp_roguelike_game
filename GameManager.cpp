@@ -1,6 +1,8 @@
 #include "GameManager.h"
+#include<iostream>
 
-GameManager::GameManager() {
+GameManager::GameManager(int type) {
+	
 	window.create(sf::VideoMode(800, 600), "untitled pvp roguelite game");
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
@@ -19,6 +21,8 @@ GameManager::GameManager() {
 	walls_and_platforms.push_back(wall4);
 	walls_and_platforms.push_back(wall5);
 	walls_and_platforms.push_back(wall6);
+
+	network_module.init(type);
 }
 
 void GameManager::play() {
@@ -31,16 +35,30 @@ void GameManager::play() {
 
 		window.clear();
 
-		std::vector<sf::IntRect> solid_objects;
+		if (network_module.is_server()) {
+			std::vector<sf::IntRect> solid_objects;
+			std::vector<sf::RectangleShape> image_objects;
 
-		for (int i = 0; i < walls_and_platforms.size(); i++) {
-			window.draw(walls_and_platforms[i].return_graphic_image());
-			solid_objects.push_back(walls_and_platforms[i].return_collision());
+			for (int i = 0; i < walls_and_platforms.size(); i++) {
+				window.draw(walls_and_platforms[i].return_graphic_image());
+				image_objects.push_back(walls_and_platforms[i].return_graphic_image());
+				solid_objects.push_back(walls_and_platforms[i].return_collision());
+			}
+			for (int i = 0; i < game_characters.size(); i++) {
+				window.draw(game_characters[i].return_graphic_image());
+				image_objects.push_back(game_characters[i].return_graphic_image());
+				game_characters[i].game_step(solid_objects);
+			}
+			window.display();
+			network_module.sending(image_objects);
+		} else {
+			window.clear();
+			std::vector<sf::RectangleShape> image_objects;
+			image_objects = network_module.receiving();
+			for (int i = 0; i < image_objects.size(); i++) {
+				window.draw(image_objects[i]);
+			}
+			window.display();
 		}
-		for (int i = 0; i < game_characters.size(); i++) {
-			window.draw(game_characters[i].return_graphic_image());
-			game_characters[i].game_step(solid_objects);
-		}
-		window.display();
 	}
 }
