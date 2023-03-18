@@ -13,7 +13,8 @@ private:
 public:
 	LivingEntity(float init_x, float init_y, float init_size_x, float init_size_y);
 	sf::RectangleShape return_graphic_image();
-	void game_step(std::vector<sf::IntRect>);
+	std::vector<float> game_step();
+	void change_parameters(float new_size_x, float new_size_y, float new_pos_x, float new_pos_y);
 	//void behavioral_model();
 };
 
