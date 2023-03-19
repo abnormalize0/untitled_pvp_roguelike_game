@@ -2,22 +2,19 @@
 #include "NetworkConnection.h"
 
 int main() {
-	NetworkConnection player_1(53000);
-	NetworkConnection player_2(53001);
-
+	NetworkConnection players(53001);
+	players.new_connection();
+	players.new_connection();
 	GameManager game;
-
-	player_1.send_objects(game.get_solid_obj());
-	player_2.send_objects(game.get_solid_obj());
+	players.send_objects(game.get_solid_obj());
 	game.new_player();
 	game.new_player();
 	while (true) {
-		game.frame_process();
+		game.frame_process( );
 		std::vector<std::vector<float>> impulses;
-		impulses.push_back(player_1.receive_impulse());
-		impulses.push_back(player_2.receive_impulse());
+		impulses.push_back(players.receive_impulse(0));
+		impulses.push_back(players.receive_impulse(1));
 		game.update_movement(impulses);
-		player_1.send_objects(game.get_dynamic_obj());
-		player_2.send_objects(game.get_dynamic_obj());
+		players.send_objects(game.get_dynamic_obj());
 	}
 }

@@ -15,7 +15,7 @@ public:
 	void frame_process();
 	std::vector<float> pack_rectangles(std::vector<std::vector<float>> collisions);
 	std::vector<float> get_solid_obj();
-	std::vector<float> get_dynamic_obj(int type);
+	std::vector<float> get_dynamic_obj();
 	void update_movement(std::vector<std::vector<float>> impulses);
 };
 
