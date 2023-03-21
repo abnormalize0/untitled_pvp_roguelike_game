@@ -2,7 +2,7 @@
 #include<iostream>
 
 NetworkConnection::NetworkConnection() {
-	tcp_socket.connect("127.0.0.1", 53001);
+	tcp_socket.connect("ovz3.abnormalize.m6x5m.vps.myjino.ru", 49275);
 	sf::Packet packet;
 	int number = 0;
 	tcp_socket.receive(packet);
@@ -22,12 +22,6 @@ std::vector<float> NetworkConnection::receive_objects() {
 		objects.push_back(parameter);
 	}
 	return objects;
-}
-
-void NetworkConnection::send_impulse(std::vector<float> impulses) {
-	sf::Packet packet;
-	packet << impulses[0] << impulses[1];
-	tcp_socket.send(packet);
 }
 
 void NetworkConnection::button_process(int case_number, float x, float y) {

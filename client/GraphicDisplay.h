@@ -14,6 +14,5 @@ public:
 	GraphicDisplay(float init_x, float init_y, float init_size_x, float init_size_y, const char* path);		//do smth with this
 	sf::RectangleShape return_rectangle();
 	void move_object(float new_x, float new_y);
-	void flip();
 };
 
