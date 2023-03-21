@@ -19,6 +19,9 @@ private:
 	float impulse_y = 0.0;
 
 	int state;
+	int jump_lock = 1;
+
+	int button_states[3] = { 0 };
 public:
 	PseudoPhysObj();
 	PseudoPhysObj(float init_x, float init_y, float init_size_x, float init_size_y);
@@ -26,4 +29,9 @@ public:
 	float get_x() { return x; }
 	float get_y() { return y; }
 	void change_parameters(float new_size_x, float new_size_y, float new_pos_x, float new_pos_y);
+	void physics_process(std::vector<sf::IntRect> solid_objects);
+	void resolve_collisions(std::vector<sf::IntRect> solid_objects);
+	void precise_position_x(sf::IntRect collision);
+	void precise_position_y(sf::IntRect collision);
+	void change_button_state(int button);
 };

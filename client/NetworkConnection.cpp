@@ -2,25 +2,23 @@
 #include<iostream>
 
 NetworkConnection::NetworkConnection() {
-	tcp_socket.connect("", 49264);
-	std::cout << "connected i guess" << std::endl;
+	tcp_socket.connect("127.0.0.1", 53001);
+	sf::Packet packet;
+	int number = 0;
+	tcp_socket.receive(packet);
+	packet >> number;
+	player_number = number;
 }
 
 std::vector<float> NetworkConnection::receive_objects() {
-	std::cout << "1" << std::endl;
 	sf::Packet packet;
 	tcp_socket.receive(packet);
-	std::cout << "2" << std::endl;
 	float size = 0;
 	packet >> size;
-	std::cout << "size is " << size << std::endl;
-	std::cout << "3" << std::endl;
 	std::vector<float> objects;
 	for (int i = 0; i < int(size) * 4; i++) {
-		std::cout << "4" << std::endl;
 		float parameter = 0;
 		packet >> parameter;
-		std::cout << parameter << std::endl;
 		objects.push_back(parameter);
 	}
 	return objects;
@@ -30,4 +28,34 @@ void NetworkConnection::send_impulse(std::vector<float> impulses) {
 	sf::Packet packet;
 	packet << impulses[0] << impulses[1];
 	tcp_socket.send(packet);
+}
+
+void NetworkConnection::button_process(int case_number, float x, float y) {
+	sf::Packet packet;
+	packet << case_number << x << y;
+	tcp_socket.send(packet);
+}
+
+std::vector<int> NetworkConnection::listen_broadcast() {
+	std::vector<int> hearsay;
+	int button = 0;
+	int player = 0;
+	float x = 0;
+	float y = 0;
+	sf::Packet packet;
+	tcp_socket.receive(packet);
+	packet >> x >> y >> button >> player;
+	hearsay.push_back(button);
+	hearsay.push_back(player);
+	hearsay.push_back(x);
+	hearsay.push_back(y);
+	return hearsay;
+}
+
+void NetworkConnection::unblock() {
+	tcp_socket.setBlocking(false);
+}
+
+int NetworkConnection::get_number() {
+	return player_number;
 }

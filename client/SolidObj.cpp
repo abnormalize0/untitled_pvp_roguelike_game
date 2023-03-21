@@ -1,6 +1,6 @@
 #include "SolidObj.h"
 
-SolidObj::SolidObj() { }
+SolidObj::SolidObj() {}
 
 SolidObj::SolidObj(float init_x, float init_y, float init_size_x, float init_size_y) {
 	x = init_x;

@@ -1,6 +1,6 @@
 #include "GraphicDisplay.h"
 
-GraphicDisplay::GraphicDisplay() { }
+GraphicDisplay::GraphicDisplay() {}
 
 
 GraphicDisplay::GraphicDisplay(float init_x, float init_y, float init_size_x, float init_size_y, const char* path) {
@@ -10,13 +10,11 @@ GraphicDisplay::GraphicDisplay(float init_x, float init_y, float init_size_x, fl
 	if (init_size_x == init_size_y) {
 		texture_x = init_size_x;
 		texture_y = init_size_y;
-	}
-	else {
+	} else {
 		if (init_size_x > init_size_y) {
 			texture_x = init_size_y * (init_size_x / 30);
 			texture_y = init_size_y;
-		}
-		else {
+		} else {
 			texture_x = init_size_x;
 			texture_y = init_size_x * (init_size_y / 30);
 		}

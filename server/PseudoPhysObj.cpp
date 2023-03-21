@@ -2,7 +2,7 @@
 
 #define MOVEMENT_SPEED 3
 #define JUMP_FORCE 60
-#define GRAVITY_FORCE 3
+#define GRAVITY_FORCE 1
 
 #define ON_GROUND 0
 #define IN_AIR 1

@@ -17,6 +17,7 @@ private:
 	void init_walls_and_platforms(std::vector<float>);
 	void move_game_characters(std::vector<float>);
 public:
+	//void parallel_send();
 	GameManager();
 	void play();
 };

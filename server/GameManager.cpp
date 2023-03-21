@@ -53,12 +53,20 @@ std::vector<float> GameManager::get_solid_obj() {
 	return pack_rectangles(solid_objects);
 }
 
-std::vector<float> GameManager::get_dynamic_obj() {
-	std::vector<std::vector<float>> dynamic_objects;
-	for (int i = 0; i < game_characters.size(); i++) {
-		dynamic_objects.push_back(game_characters[i].return_collisions());
+std::vector<float> GameManager::get_dynamic_obj(int type) {
+	if (type == 0) {
+		std::vector<std::vector<float>> dynamic_objects;
+		for (int i = 0; i < game_characters.size(); i++) {
+			dynamic_objects.push_back(game_characters[i].return_collisions());
+		}
+		return pack_rectangles(dynamic_objects);
+	} else {
+		std::vector<std::vector<float>> dynamic_objects;
+		for (int i = game_characters.size() - 1; i >= 0; i--) {
+			dynamic_objects.push_back(game_characters[i].return_collisions());
+		}
+		return pack_rectangles(dynamic_objects);
 	}
-	return pack_rectangles(dynamic_objects);
 }
 
 void GameManager::update_movement(std::vector<std::vector<float>> impulses) {
