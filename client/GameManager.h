@@ -15,6 +15,9 @@ private:
 	std::vector<SolidEntity> walls_and_platforms;
 
 	void init_walls_and_platforms(std::vector<float>);
+	int next_room;
+	float x_position;
+	sf::View view;
 public:
 	GameManager();
 	void play();

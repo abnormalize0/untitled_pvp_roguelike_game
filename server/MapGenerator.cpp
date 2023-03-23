@@ -77,21 +77,21 @@ std::vector<int> MapGenerator::build_floor(std::vector<int> previous_floor, int 
 		if (previous_floor[0] == 1) {
 			next_floor.push_back(1);
 		} else {
-			//if (std::rand() % 2) {
-			//	next_floor.push_back(1);
-			//} else {
-				next_floor.push_back(0);
-			//}
+			next_floor.push_back(0);
 		}
 		begin++;
 		end--;
 	} else {
-		next_floor.push_back(0);
+		if (previous_floor[0] == 1) {
+			next_floor.push_back(1);
+		} else {
+			next_floor.push_back(0);
+		}
 	}
 	for (int i = begin; i < end; i++) {
 		if (previous_floor[i] == 1) {
 			if (next_floor.back() == 1) {
-				if (std::rand() % 2) {
+				if (std::rand() % 4) {
 					next_floor.push_back(1);
 				} else {
 					next_floor.push_back(0);
@@ -101,7 +101,7 @@ std::vector<int> MapGenerator::build_floor(std::vector<int> previous_floor, int 
 			}
 		} else {
 			if ((i + 1 < end) && (previous_floor[i + 1] == 1)) {
-				if (std::rand() % 2) {
+				if (std::rand() % 4) {
 					next_floor.push_back(1);
 				} else {
 					next_floor.push_back(0);
@@ -129,8 +129,8 @@ std::vector<int> MapGenerator::adjust(std::vector<int> floor, int floor_size, in
 
 std::vector<GameObj> MapGenerator::convert_map_to_obj(std::vector<std::vector<int>> map) {
 	std::vector<GameObj> map_objects;
-	int height = 10;
-	int width = 20;
+	int height = 600;
+	int width = 800;
 	int current_width = 0;
 	int current_hegiht = 0;
 	for (int i = map.size() - 1; i >= 0; i--) {
@@ -141,8 +141,51 @@ std::vector<GameObj> MapGenerator::convert_map_to_obj(std::vector<std::vector<in
 		}
 		for (int j = 0; j < map[i].size(); j++) {
 			if (map[i][j]) {
-				GameObj room(current_width, current_hegiht, width, height);
-				map_objects.push_back(room);
+				GameObj room_wall1(current_width, current_hegiht, 30, 600);		//outer walls
+				GameObj room_wall2(current_width + 770, current_hegiht, 30, 600);
+				GameObj room_wall3(current_width, current_hegiht + 570, 800, 30);
+				//GameObj room_wall4(current_width, current_hegiht, 800, 30);
+				//GameObj room_wall1(current_width, current_hegiht, 30, 610);
+				//GameObj room_wall1(current_width, current_hegiht, 30, 610);
+				GameObj room_wall4(current_width + 400, current_hegiht + 200, 400, 30);		//interier
+				GameObj room_wall5(current_width, current_hegiht + 390, 400, 30);
+				map_objects.push_back(room_wall1);
+				map_objects.push_back(room_wall2);
+				map_objects.push_back(room_wall3);
+				map_objects.push_back(room_wall4);
+				map_objects.push_back(room_wall5);
+				if (i == map.size() - 1) {		//specify ceiling
+					GameObj room_ceil(current_width, current_hegiht, 800, 30);
+					map_objects.push_back(room_ceil);
+				} else {
+					if (map[i].size() > map[i + 1].size()) {
+						if (j == 0) {
+							GameObj room_ceil(current_width, current_hegiht, 400, 30);
+							map_objects.push_back(room_ceil);
+						} else if (j == map[i].size() - 1) {
+							GameObj room_ceil(current_width + 400, current_hegiht, 400, 30);
+							map_objects.push_back(room_ceil);
+						} else {
+							if (!map[i + 1][j - 1]) {
+								GameObj room_ceil(current_width, current_hegiht, 400, 30);
+								map_objects.push_back(room_ceil);
+							}
+							if (!map[i + 1][j]) {
+								GameObj room_ceil(current_width + 400, current_hegiht, 400, 30);
+								map_objects.push_back(room_ceil);
+							}
+						}
+					} else {
+						if (!map[i + 1][j]) {
+							GameObj room_ceil(current_width, current_hegiht, 400, 30);
+							map_objects.push_back(room_ceil);
+						}
+						if (!map[i + 1][j + 1]) {
+							GameObj room_ceil(current_width + 400, current_hegiht, 400, 30);
+							map_objects.push_back(room_ceil);
+						}
+					}
+				}
 			} 
 			current_width = current_width + width;
 		}

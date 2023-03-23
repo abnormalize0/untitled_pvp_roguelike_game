@@ -6,10 +6,16 @@ GameManager::GameManager() {
 	window.create(sf::VideoMode(800, 600), "untitled pvp roguelite game");
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
-
+	
+	view.setCenter(sf::Vector2f(800 * 0.5 + (800 / 2) , 600 * 54 + (600/2))); //make dynamic
+	view.setSize(sf::Vector2f(800, 600));
+	next_room = 54;
+	x_position = 0.5;
+	view.zoom(1);
+	window.setView(view);
 	init_walls_and_platforms(network_module.receive_objects());
-	LivingEntity player1(40, 500, 40, 40);
-	LivingEntity player2(40, 500, 40, 40);
+	LivingEntity player1(800 * 0.5 + 40, 600 * 54 + 500, 40, 40);
+	LivingEntity player2(800 * 0.5 + 40, 600 * 54 + 500, 40, 40);
 	game_characters.push_back(player1);
 	game_characters.push_back(player2);
 }
@@ -84,6 +90,25 @@ void GameManager::play() {
 			window.draw(game_characters[i].return_graphic_image());
 			game_characters[i].game_step(solid_objects);
 		}
+
+		if (game_characters[network_module.get_number()].get_y() < 600 * next_room + 30) {
+			std::cout << 600 * next_room + 30 << " " << game_characters[network_module.get_number()].get_y() << " " << "exceed" << std::endl;
+			if (game_characters[network_module.get_number()].get_x() > x_position * 800 + 400) {
+				x_position = x_position + 0.5;
+				view.move(400, -600);
+				std::cout << "right" << std::endl;
+			} else {
+				x_position = x_position - 0.5;
+				view.move(-400, -600);
+				std::cout << "left" << std::endl;
+			}
+			next_room--;
+			game_characters[network_module.get_number()].change_parameters(40, 40, 800 * x_position + 40, 600 * next_room + 500);
+			//view.setCenter(sf::Vector2f(800 * x_position + (800 / 2), 600 * next_room + (600 / 2)));
+			
+			window.setView(view);
+		}
+
 		window.display();
 
 		std::vector<int> button_update = network_module.listen_broadcast();

@@ -2,7 +2,7 @@
 #include<iostream>
 
 NetworkConnection::NetworkConnection() {
-	tcp_socket.connect("ovz3.abnormalize.m6x5m.vps.myjino.ru", 49275);
+	tcp_socket.connect("127.0.0.1", 53001);
 	sf::Packet packet;
 	int number = 0;
 	tcp_socket.receive(packet);
