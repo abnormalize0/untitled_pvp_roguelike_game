@@ -15,6 +15,11 @@ GameManager::GameManager() {
 	walls_and_platforms.push_back(wall5);
 	walls_and_platforms.push_back(wall6);
 
+	MapGenerator world;
+	std::vector<std::vector<int>> map = world.create_towers(4, 1, 5);
+	std::vector<GameObj> generated = world.convert_map_to_obj(map);
+
+	walls_and_platforms.insert(walls_and_platforms.end(), generated.begin(), generated.end());
 }
 
 void GameManager::new_player() {

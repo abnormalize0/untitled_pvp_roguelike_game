@@ -3,6 +3,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "GameObj.h"
+#include "MapGenerator.h"
 
 class GameManager {
 private:

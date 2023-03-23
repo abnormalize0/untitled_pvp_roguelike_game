@@ -1,7 +1,6 @@
 #pragma once
 
 #include <SFML/Network.hpp>
-#include <list>
 
 class NetworkConnection {
 private:
