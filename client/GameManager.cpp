@@ -18,6 +18,7 @@ GameManager::GameManager() {
 	LivingEntity player2(800 * 0.5 + 40, 600 * 54 + 500, 40, 40);
 	game_characters.push_back(player1);
 	game_characters.push_back(player2);
+	transition_left = 0;
 }
 
 void GameManager::play() {
@@ -93,22 +94,23 @@ void GameManager::play() {
 
 		if (game_characters[network_module.get_number()].get_y() < 600 * next_room + 30) {
 			std::cout << 600 * next_room + 30 << " " << game_characters[network_module.get_number()].get_y() << " " << "exceed" << std::endl;
+			next_room--;
 			if (game_characters[network_module.get_number()].get_x() > x_position * 800 + 400) {
 				x_position = x_position + 0.5;
-				view.move(400, -600);
+				//view.move(400, -600);
+				transition_left = 20;
+				game_characters[network_module.get_number()].change_parameters(40, 40, game_characters[network_module.get_number()].get_x(), 600 * next_room + 500);
 				std::cout << "right" << std::endl;
 			} else {
 				x_position = x_position - 0.5;
-				view.move(-400, -600);
+				//view.move(-400, -600);
+				transition_left = -20;
+				game_characters[network_module.get_number()].change_parameters(40, 40, game_characters[network_module.get_number()].get_x(), 600 * next_room + 500);
 				std::cout << "left" << std::endl;
 			}
-			next_room--;
-			game_characters[network_module.get_number()].change_parameters(40, 40, 800 * x_position + 40, 600 * next_room + 500);
 			//view.setCenter(sf::Vector2f(800 * x_position + (800 / 2), 600 * next_room + (600 / 2)));
-			
-			window.setView(view);
 		}
-
+		camera_transition();
 		window.display();
 
 		std::vector<int> button_update = network_module.listen_broadcast();
@@ -124,5 +126,18 @@ void GameManager::init_walls_and_platforms(std::vector<float> objects) {
 	for (int i = 0; i < objects.size(); i = i + 4) {
 		SolidEntity wall(objects[i + 2], objects[i + 3], objects[i], objects[i + 1]);
 		walls_and_platforms.push_back(wall);
+	}
+}
+
+void GameManager::camera_transition() {
+	if (transition_left != 0) {
+		if (transition_left > 0) {
+			view.move(10*2, -15*2);
+			transition_left--;
+		} else {
+			view.move(-10*2, -15*2);
+			transition_left++;
+		}
+		window.setView(view);
 	}
 }

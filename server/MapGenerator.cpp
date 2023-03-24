@@ -154,35 +154,46 @@ std::vector<GameObj> MapGenerator::convert_map_to_obj(std::vector<std::vector<in
 				map_objects.push_back(room_wall3);
 				map_objects.push_back(room_wall4);
 				map_objects.push_back(room_wall5);
+
+				GameObj room_separator(current_width + 370, current_hegiht, 60, 30);
+				map_objects.push_back(room_separator);
+
 				if (i == map.size() - 1) {		//specify ceiling
 					GameObj room_ceil(current_width, current_hegiht, 800, 30);
 					map_objects.push_back(room_ceil);
 				} else {
+					int total_walls = 0;
 					if (map[i].size() > map[i + 1].size()) {
 						if (j == 0) {
 							GameObj room_ceil(current_width, current_hegiht, 400, 30);
 							map_objects.push_back(room_ceil);
+							total_walls++;
 						} else if (j == map[i].size() - 1) {
 							GameObj room_ceil(current_width + 400, current_hegiht, 400, 30);
 							map_objects.push_back(room_ceil);
+							total_walls++;
 						} else {
 							if (!map[i + 1][j - 1]) {
 								GameObj room_ceil(current_width, current_hegiht, 400, 30);
 								map_objects.push_back(room_ceil);
+								total_walls++;
 							}
 							if (!map[i + 1][j]) {
 								GameObj room_ceil(current_width + 400, current_hegiht, 400, 30);
 								map_objects.push_back(room_ceil);
+								total_walls++;
 							}
 						}
 					} else {
 						if (!map[i + 1][j]) {
 							GameObj room_ceil(current_width, current_hegiht, 400, 30);
 							map_objects.push_back(room_ceil);
+							total_walls++;
 						}
 						if (!map[i + 1][j + 1]) {
 							GameObj room_ceil(current_width + 400, current_hegiht, 400, 30);
 							map_objects.push_back(room_ceil);
+							total_walls++;
 						}
 					}
 				}

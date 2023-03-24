@@ -18,7 +18,9 @@ private:
 	int next_room;
 	float x_position;
 	sf::View view;
+	int transition_left;
 public:
 	GameManager();
 	void play();
+	void camera_transition();
 };
